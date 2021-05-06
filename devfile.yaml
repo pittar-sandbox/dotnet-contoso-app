@@ -1,10 +1,18 @@
 apiVersion: 1.0.0
 metadata:
- generateName: dot-net-data-
+ generateName: dotnet-contoso-
 projects:
-  - name: dot-net-data
+  - name: contoso-app
     source:
-      location: 'https://github.com/pittar-sandbox/dot-net-data.git'
+      location: 'https://github.com/pittar-sandbox/dotnet-contoso-app.git'
+      type: 'git'
+  - name: contoso-gitops-admins
+    source:
+      location: 'https://github.com/pittar-sandbox/dotnet-contoso-gitops-admins.git'
+      type: 'git'
+  - name: contoso-gitops-developers
+    source:
+      location: 'https://github.com/pittar-sandbox/dotnet-contoso-gitops-developers.git'
       type: 'git'
 components:
   - id: redhat-developer/che-omnisharp-plugin/latest
@@ -44,31 +52,31 @@ components:
 commands:
   - name: 1. Install cli dependencies
     actions:
-      - workdir: '${CHE_PROJECTS_ROOT}/dot-net-data'
+      - workdir: '${CHE_PROJECTS_ROOT}/contoso-app'
         type: exec
         command: dotnet tool install --global dotnet-ef
         component: dotnet
   - name: 1. Update dependencies
     actions:
-      - workdir: '${CHE_PROJECTS_ROOT}/dot-net-data'
+      - workdir: '${CHE_PROJECTS_ROOT}/contoso-app'
         type: exec
         command: dotnet restore
         component: dotnet
   - name: 2. Run SQL Server Migrations
     actions:
-      - workdir: '${CHE_PROJECTS_ROOT}/dot-net-data'
+      - workdir: '${CHE_PROJECTS_ROOT}/contoso-app'
         type: exec
         command: dotnet ef database update
         component: dotnet
   - name: 3. Build
     actions:
-      - workdir: '${CHE_PROJECTS_ROOT}/dot-net-data'
+      - workdir: '${CHE_PROJECTS_ROOT}/contoso-app'
         type: exec
         command: dotnet build
         component: dotnet
   - name: 4. Run
     actions:
-      - workdir: '${CHE_PROJECTS_ROOT}/dot-net-data'
+      - workdir: '${CHE_PROJECTS_ROOT}/contoso-app'
         type: exec
         command: dotnet run
         component: dotnet
@@ -81,7 +89,7 @@ commands:
                  {
                     "type": "netcoredbg",
                     "request": "launch",
-                    "program": "/projects/dot-net-data/bin/Debug/netcoreapp3.1/web.dll",
+                    "program": "/projects/contoso-app/bin/Debug/netcoreapp3.1/web.dll",
                     "args": [],
                     "name": ".NET Core Launch (console)",
                     "stopAtEntry": true,
