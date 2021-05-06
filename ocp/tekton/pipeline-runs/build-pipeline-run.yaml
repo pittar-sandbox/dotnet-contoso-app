@@ -1,0 +1,21 @@
+kind: PipelineRun
+apiVersion: tekton.dev/v1beta1
+metadata:
+  annotations:
+    argocd.argoproj.io/compare-options: IgnoreExtraneous
+    argocd.argoproj.io/sync-options: Prune=false
+  generateName: build-dotnet-run-
+spec:
+  pipelineRef:
+    name: build-dotnet
+  params:
+    - name: "git-url"
+      value: "https://github.com/pittar-sandbox/dot-net-data.git"
+    - name: "git-revision"
+      value: "main"
+    - name: "app-name"
+      value: "contoso"
+  workspaces:
+    - name: shared-workspace
+      persistentVolumeClaim:
+        claimName: workspace

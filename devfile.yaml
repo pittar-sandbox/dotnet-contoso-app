@@ -1,0 +1,93 @@
+apiVersion: 1.0.0
+metadata:
+ generateName: dot-net-data-
+projects:
+  - name: dot-net-data
+    source:
+      location: 'https://github.com/pittar-sandbox/dot-net-data.git'
+      type: 'git'
+components:
+  - id: redhat-developer/che-omnisharp-plugin/latest
+    type: chePlugin
+    alias: omnisharp
+  - id: redhat-developer/netcoredbg-theia-plugin/latest
+    type: chePlugin
+    alias: netcoredbg
+  - mountSources: true
+    endpoints:
+      - name: demo
+        port: 5000
+    memoryLimit: 1Gi
+    type: dockerimage
+    volumes:
+      - name: nuget
+        containerPath: /home/jboss/.nuget
+    alias: dotnet
+    image: 'registry.redhat.io/codeready-workspaces/stacks-dotnet-rhel8@sha256:ea77974b206c7d7abcad5cd32149f6bb669d3cf867135553af4d7dddd24ba9cf'
+    env:
+      - name: ASPNETCORE_ENVIRONMENT
+        value: "Development"
+  - id: redhat/vscode-xml/latest
+    type: chePlugin
+  - alias: sqlserver
+    endpoints:
+      - name: sqlserver
+        port: 1433
+    memoryLimit: 3Gi
+    type: dockerimage
+    image: 'mcr.microsoft.com/mssql/rhel/server:2019-latest'
+    env:
+      - name: ACCEPT_EULA
+        value: "Y"
+      - name: SA_PASSWORD
+        value: "r3dh4t1!"
+commands:
+  - name: 1. Install cli dependencies
+    actions:
+      - workdir: '${CHE_PROJECTS_ROOT}/dot-net-data'
+        type: exec
+        command: dotnet tool install --global dotnet-ef
+        component: dotnet
+  - name: 1. Update dependencies
+    actions:
+      - workdir: '${CHE_PROJECTS_ROOT}/dot-net-data'
+        type: exec
+        command: dotnet restore
+        component: dotnet
+  - name: 2. Run SQL Server Migrations
+    actions:
+      - workdir: '${CHE_PROJECTS_ROOT}/dot-net-data'
+        type: exec
+        command: dotnet ef database update
+        component: dotnet
+  - name: 3. Build
+    actions:
+      - workdir: '${CHE_PROJECTS_ROOT}/dot-net-data'
+        type: exec
+        command: dotnet build
+        component: dotnet
+  - name: 4. Run
+    actions:
+      - workdir: '${CHE_PROJECTS_ROOT}/dot-net-data'
+        type: exec
+        command: dotnet run
+        component: dotnet
+  - name: Launch .net web application in debug mode
+    actions:
+      - referenceContent: |
+          {
+            "version": "0.2.0",
+              "configurations": [
+                 {
+                    "type": "netcoredbg",
+                    "request": "launch",
+                    "program": "/projects/dot-net-data/bin/Debug/netcoreapp3.1/web.dll",
+                    "args": [],
+                    "name": ".NET Core Launch (console)",
+                    "stopAtEntry": true,
+                    "preLaunchTask": "2. Build",
+                    "console": "internalConsole"
+                  }
+              ]
+          }
+        type: vscode-launch

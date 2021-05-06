@@ -1,0 +1,19 @@
+kind: PipelineRun
+apiVersion: tekton.dev/v1beta1
+metadata:
+  annotations:
+    argocd.argoproj.io/compare-options: IgnoreExtraneous
+    argocd.argoproj.io/sync-options: Prune=false
+  generateName: build-dotnet-cli-image-run-
+spec:
+  pipelineRef:
+    name: build-dotnet-cli-image
+  params:
+    - name: "git-url"
+      value: "https://github.com/pittar/dotnet-ef-ubi8.git"
+    - name: "git-revision"
+      value: "main"
+  workspaces:
+    - name: shared-workspace
+      persistentVolumeClaim:
+        claimName: workspace
