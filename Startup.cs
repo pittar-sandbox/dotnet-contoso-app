@@ -29,7 +29,7 @@ namespace ContosoUniversity
         }
         #endregion
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DataContext dataContext)
         {
             if (env.IsDevelopment())
             {
@@ -52,6 +52,8 @@ namespace ContosoUniversity
             {
                 endpoints.MapRazorPages();
             });
+
+            dataContext.Database.Migrate();
         }
     }
 }

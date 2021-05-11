@@ -15,6 +15,12 @@ namespace ContosoUniversity
 
             CreateDbIfNotExists(host);
 
+            // using (var scope = host.Services.CreateScope())
+            // {
+            //     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            //     db.Database.Migrate();
+            // }
+
             host.Run();
         }
 
