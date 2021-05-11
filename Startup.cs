@@ -29,7 +29,7 @@ namespace ContosoUniversity
         }
         #endregion
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DataContext dataContext)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, SchoolContext schoolDbContext)
         {
             if (env.IsDevelopment())
             {
@@ -37,6 +37,7 @@ namespace ContosoUniversity
             }
             else
             {
+                schoolDbContext.Database.Migrate();
                 app.UseExceptionHandler("/Error");
                 app.UseHsts();
             }
@@ -52,8 +53,6 @@ namespace ContosoUniversity
             {
                 endpoints.MapRazorPages();
             });
-
-            dataContext.Database.Migrate();
         }
     }
 }
