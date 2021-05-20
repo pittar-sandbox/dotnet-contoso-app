@@ -56,46 +56,27 @@ commands:
         type: exec
         command: dotnet tool install --global dotnet-ef
         component: dotnet
-  - name: 1. Update dependencies
+  - name: 2. Update dependencies
     actions:
       - workdir: '${CHE_PROJECTS_ROOT}/contoso-app'
         type: exec
         command: dotnet restore
         component: dotnet
-  - name: 2. Run SQL Server Migrations
+  - name: 3. Run SQL Server Migrations
     actions:
       - workdir: '${CHE_PROJECTS_ROOT}/contoso-app'
         type: exec
         command: dotnet ef database update
         component: dotnet
-  - name: 3. Build
+  - name: 4. Build
     actions:
       - workdir: '${CHE_PROJECTS_ROOT}/contoso-app'
         type: exec
         command: dotnet build
         component: dotnet
-  - name: 4. Run
+  - name: 5. Run
     actions:
       - workdir: '${CHE_PROJECTS_ROOT}/contoso-app'
         type: exec
         command: dotnet run
         component: dotnet
-  - name: Launch .net web application in debug mode
-    actions:
-      - referenceContent: |
-          {
-            "version": "0.2.0",
-              "configurations": [
-                 {
-                    "type": "netcoredbg",
-                    "request": "launch",
-                    "program": "/projects/contoso-app/bin/Debug/netcoreapp3.1/web.dll",
-                    "args": [],
-                    "name": ".NET Core Launch (console)",
-                    "stopAtEntry": true,
-                    "preLaunchTask": "2. Build",
-                    "console": "internalConsole"
-                  }
-              ]
-          }
-        type: vscode-launch
