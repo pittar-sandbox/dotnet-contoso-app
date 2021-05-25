@@ -37,10 +37,11 @@ namespace ContosoUniversity
             }
             else
             {
-                schoolDbContext.Database.Migrate();
                 app.UseExceptionHandler("/Error");
                 app.UseHsts();
             }
+            
+            schoolDbContext.Database.Migrate();
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
