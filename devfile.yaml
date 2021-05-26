@@ -31,7 +31,7 @@ components:
       - name: nuget
         containerPath: /home/jboss/.nuget
     alias: dotnet
-    image: 'quay.io/pittar/crw-dotnet-stack:2.8'
+    image: 'quay.io/pittar/crw-dotnet-stack:2.8-6'
     env:
       - name: ASPNETCORE_ENVIRONMENT
         value: "Development"
