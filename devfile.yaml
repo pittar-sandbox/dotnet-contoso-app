@@ -50,31 +50,25 @@ components:
       - name: SA_PASSWORD
         value: "r3dh4t1!"
 commands:
-  - name: 1. Install cli dependencies
-    actions:
-      - workdir: '${CHE_PROJECTS_ROOT}/contoso-app'
-        type: exec
-        command: dotnet tool install --global dotnet-ef
-        component: dotnet
-  - name: 2. Update dependencies
+  - name: 1. Update dependencies
     actions:
       - workdir: '${CHE_PROJECTS_ROOT}/contoso-app'
         type: exec
         command: dotnet restore
         component: dotnet
-  - name: 3. Run SQL Server Migrations
+  - name: 2. Run SQL Server Migrations
     actions:
       - workdir: '${CHE_PROJECTS_ROOT}/contoso-app'
         type: exec
         command: dotnet ef database update
         component: dotnet
-  - name: 4. Build
+  - name: 3. Build
     actions:
       - workdir: '${CHE_PROJECTS_ROOT}/contoso-app'
         type: exec
         command: dotnet build
         component: dotnet
-  - name: 5. Run
+  - name: 4. Run
     actions:
       - workdir: '${CHE_PROJECTS_ROOT}/contoso-app'
         type: exec
